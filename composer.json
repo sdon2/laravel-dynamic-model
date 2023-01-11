@@ -1,0 +1,30 @@
+{
+    "name": "sdon2/laravel-dynamic-model",
+    "description": "Laravel Dynamic Model",
+    "keywords": [
+        "php",
+        "laravel"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Saravanakumar Arumugam",
+            "email": "saravanakumar.a.o@gmail.com",
+            "homepage": "https://github.com/sdon2"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Sdon2\\Laravel\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.4|>=8.0|>=8.1|>=8.2",
+        "laravel/framework": "^5.3|^6.0|^7.0|^8.0|^9.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "kylekatarnls/update-helper": false
+        }
+    }
+}
