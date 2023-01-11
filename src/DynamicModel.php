@@ -45,11 +45,12 @@ abstract class DynamicModel extends Model
      * @param $attributes
      * @throws Exception
      */
-    public function __construct($table, $attributes = [])
+    public function __construct($table, $connection = null, $attributes = [])
     {
         parent::__construct($attributes);
 
         $this->table = $table;
+        $this->connection = $connection;
 
         if (!Schema::hasTable($this->table)) {
             throw new Exception("The table you provided ({$this->table}) to the DynamicModel does not exists! Please create it first!");
