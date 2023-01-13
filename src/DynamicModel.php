@@ -42,7 +42,7 @@ abstract class DynamicModel extends Model
     protected $guarded = [];
 
     protected static $dynamicTable;
-    protected static $connection;
+    protected static $dynamicConnection;
 
     /**
      * important! - attributes need to be passed,
@@ -56,7 +56,7 @@ abstract class DynamicModel extends Model
         parent::__construct($attributes);
 
         $this->table = self::$dynamicTable = $table;
-        $this->connection = self::$connection = $connection;
+        $this->connection = self::$dynamicConnection = $connection;
 
         $schema = Schema::connection($this->connection);
 
@@ -80,7 +80,7 @@ abstract class DynamicModel extends Model
         // This method just provides a convenient way for us to generate fresh model
         // instances of this current model. It is particularly useful during the
         // hydration of new objects via the Eloquent query builder instances.
-        $model = new self(self::$dynamicTable, self::$connection, $attributes);
+        $model = new self(self::$dynamicTable, self::$dynamicConnection, $attributes);
 
         $model->exists = $exists;
 
@@ -100,7 +100,7 @@ abstract class DynamicModel extends Model
         // First we will just create a fresh instance of this model, and then we can set the
         // connection on the model so that it is used for the queries we execute, as well
         // as being set on every relation we retrieve without a custom connection name.
-        $instance = new self(self::$dynamicTable, self::$connection);
+        $instance = new self(self::$dynamicTable, self::$dynamicConnection);
 
         $instance->setConnection($connection);
 
@@ -126,7 +126,7 @@ abstract class DynamicModel extends Model
         // We will actually pull the models from the database table and call delete on
         // each of them individually so that their events get fired properly with a
         // correct set of attributes in case the developers wants to check these.
-        $key = ($instance = new self(self::$dynamicTable, self::$connection))->getKeyName();
+        $key = ($instance = new self(self::$dynamicTable, self::$dynamicConnection))->getKeyName();
 
         $count = 0;
 
@@ -141,7 +141,7 @@ abstract class DynamicModel extends Model
 
     public static function query()
     {
-        return (new self(self::$dynamicTable, self::$connection))->newQuery();
+        return (new self(self::$dynamicTable, self::$dynamicConnection))->newQuery();
     }
 
     public function replicate(array $except = null)
@@ -157,7 +157,7 @@ abstract class DynamicModel extends Model
             $except ? array_unique(array_merge($except, $defaults)) : $defaults
         );
 
-        return tap(new self(self::$dynamicTable, self::$connection), function ($instance) use ($attributes) {
+        return tap(new self(self::$dynamicTable, self::$dynamicConnection), function ($instance) use ($attributes) {
             $instance->setRawAttributes($attributes);
 
             $instance->setRelations($this->relations);
@@ -168,6 +168,6 @@ abstract class DynamicModel extends Model
 
     public static function __callStatic($method, $parameters)
     {
-        return (new self(self::$dynamicTable, self::$connection))->$method(...$parameters);
+        return (new self(self::$dynamicTable, self::$dynamicConnection))->$method(...$parameters);
     }
 }
