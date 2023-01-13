@@ -57,11 +57,13 @@ abstract class DynamicModel extends Model
         $this->table = self::$dynamicTable = $table;
         $this->connection = $connection;
 
-        if (!Schema::hasTable($this->table)) {
+        $schema = Schema::connection($this->connection);
+
+        if (!$schema->hasTable($this->table)) {
             throw new Exception("The table you provided ({$this->table}) to the DynamicModel does not exists! Please create it first!");
         }
 
-        $connection = Schema::getConnection();
+        $connection = $schema->getConnection();
         $table = $connection->getDoctrineSchemaManager()->listTableDetails($this->table);
         $primaryKeyName = $table->getPrimaryKey()->getColumns()[0];
         $primaryColumn = $connection->getDoctrineColumn($this->table, $primaryKeyName);
